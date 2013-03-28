@@ -16,8 +16,6 @@
 #import "WelcomeController.h"
 #import "LogController.h"
 #import "DeviceMapController.h"
-#import "IAPHelper.h"
-#import "StoreControllerViewController.h"
 #import "SignificantLocationController.h"
 
 #import "ReviewRequest.h"
@@ -77,12 +75,7 @@
     // Return the number of rows in the section.
 	switch (section) {
         case 0:
-            if ([[PreyConfig instance] isPro])
-                return 1;
-            if ([[[IAPHelper sharedHelper] products] count] == 0) {
-                return 1;
-            }
-            return 2;
+            return 1;
             break;
 		case 1:
 			return 3;
@@ -198,12 +191,7 @@
                 [self.navigationController pushViewController:deviceMapController animated:YES];
                 [deviceMapController release];
             }
-            else if ([indexPath row] == 1)
-            {
-                StoreControllerViewController *viewController = [[StoreControllerViewController alloc] init];
-                [self.navigationController pushViewController:viewController animated:YES];
-                [viewController release];
-            }
+            break;
 		case 1:
             if ([indexPath row] == 2){
 				UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:NSLocalizedString(@"You're about to delete this device from the Control Panel.\n Are you sure?",nil) delegate:self cancelButtonTitle:NSLocalizedString(@"No, don't delete",nil) destructiveButtonTitle:NSLocalizedString(@"Yes, remove from my account",nil) otherButtonTitles:nil];
@@ -461,7 +449,6 @@
      
      accManager = [[AccuracyManager alloc] init];
      delayManager = [[DelayManager alloc] init];
-     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadData:) name:kProductsLoadedNotification object:nil];
      [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(missingStateUpdated:) name:@"missingUpdated" object:nil];
      [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadData:) name:@"delayUpdated" object:nil];
      [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadData:) name:@"accuracyUpdated" object:nil];
